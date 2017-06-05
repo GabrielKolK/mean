@@ -1,0 +1,9 @@
+######## TERMINOLOGIA ###########
+
+SQL RDBMS ---------- MongoDB
+DATABASE  ---------- DATABASE
+TABLE     ---------- COLLECTION
+ROWS      ---------- DOCUMENT JSON
+QUERY     ---------- QUERY
+INDEX     ---------- INDEX
+PARTITION ---------- SHARD
