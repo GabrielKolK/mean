@@ -1,0 +1,62 @@
+ Exercicios Be-mean-pokemons
+  
+  aula 2-
+  1: Crie uma database chamada be-mean-pokemons;
+  2: Liste quais databases voce possui nesse servidor;
+  3: Liste quais collections voce possui nessa database;
+  4: Insira pelo menos 5 pokemons == A SUA ESCOLHA == utilizando o mesmo padrao de campos utilizado: name, description, type, attack, defense e height;
+  5: Liste os pokemons existentes na sua colecao;
+  6: Busque um pokemon a sua escolha, que acabou de ser inserido, e armazene-o em uma variavel chamada `poke`;
+  7: Modifique sua `Description` e 'salve-o';
+ -----------------------------------------------------------------------------------------------------------------------------------------------  
+ 1 =
+ ```
+ use be-mean-pokemons
+ ```
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ 2 =
+ ```
+ show dbs
+ ```
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ 3 =
+ ```
+ show collections
+ ```
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ 4 =
+ ```
+ var pokemon = [{ "name" : "Pikachu", "description" : "Boneco Amarelo que Solta Raio", "type" : "eletric", "attack" : 140, "defense" : -90, "height" : 0.6 }, "name" : "charmander", "description" : "mini dinossauro voador que tem o rabo pegando fogo", "type" : "fire", "attack" : 200, "defense" : 95, "height" : 0.9 }, "name" : "onix", "description" : "boneco de pedra no formato de uma cobra", "type" : "rock", "attack" : 5, "defense" : 400, "height" : 0.7 }, "name" : "squirtle", "description" : "tartaruga marinha tiltada cascuda", "type" : "water", "attack" : 200, "defense" : 250, "height" : 0.8 }, "name" : "meowth", "description" : "miau e isso ai", "type" : "normal", "attack" : -5, "defense" : -4, "height" : 0.2 }]
+ db.pokemons.insert(pokemons)
+ ```
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ 5 =
+ ```
+ db.pokemons.find()
+ ```
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ 6 =
+ ```
+ var query = { 'name':'meowth}
+ query
+ var poke = db.pokemons.findOne(query)
+ poke
+ ```
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ 7 =
+ ```
+ poke.description
+ miau e isso ai
+ poke.description = "miau e isso ai/equipe rocket"
+ poke
+ db.pokemons.save(poke)
+ db.pokemons.findOne(query)
+{
+        "_id" : ObjectId("59370eedce83fec3044b486c"),
+        "name" : "meowth",
+        "description" : "miau e isso ai/equipe rocket",
+        "type" : "normal",
+        "attack" : -5,
+        "defense" : -4,
+        "height" : 0.2
+ ```
