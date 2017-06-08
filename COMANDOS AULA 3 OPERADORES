@@ -1,0 +1,103 @@
+OPERADORES ARITMETICOS
+<  ------ $lt     lt=(less than, menor que)
+<= ------ $lte    lt=(less than or equal, menor ou igual que)
+>  ------ $gt     gt=(greater than, maior que)
+>= ------ $gte    gte=(greater than or equal, maior ou igual que)
+ex:
+```
+$lt
+
+var query = { defense: {$lt: 95}}
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370ccfce83fec3044b4868"), "name" : "Pikachu", "description" : "Boneco Amarelo que Solta Raio", "type" : "eletric", "attack" : 140, "defense" : -90, "height" : 0.6 }
+{ "_id" : ObjectId("59370eedce83fec3044b486c"), "name" : "meowth", "description" : "miau e isso ai/equipe rocket", "type" : "normal", "attack" : -5, "defense" : -4, "height" : 0.2 }
+```
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+```
+$lte
+
+var query = { defense: {$lte: 95}}
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370ccfce83fec3044b4868"), "name" : "Pikachu", "description" : "Boneco Amarelo que Solta Raio", "type" : "eletric", "attack" : 140, "defense" : -90, "height" : 0.6 }
+{ "_id" : ObjectId("59370d2dce83fec3044b4869"), "name" : "charmander", "description" : "mini dinossauro voador que tem o rabo pegando fogo", "type" : "fire", "attack" : 200, "defense" : 95, "height" : 0.9 }
+{ "_id" : ObjectId("59370eedce83fec3044b486c"), "name" : "meowth", "description" : "miau e isso ai/equipe rocket", "type" : "normal", "attack" : -5, "defense" : -4, "height" : 0.2 }
+```
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+```
+$gt
+var query = { defense: {$gt: 95}}
+>
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370e2dce83fec3044b486a"), "name" : "onix", "description" : "boneco de pedra no formato de uma cobra", "type" : "rock", "attack" : 5, "defense" : 400, "height" : 0.7 }
+{ "_id" : ObjectId("59370e48ce83fec3044b486b"), "name" : "squirtle", "description" : "tartaruga marinha tiltada cascuda", "type" : "water", "attack" : 200, "defense" : 250, "height" : 0.8 }
+```
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+```
+$gte
+var query = { defense: {$gte: 95}}
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370d2dce83fec3044b4869"), "name" : "charmander", "description" : "mini dinossauro voador que tem o rabo pegando fogo", "type" : "fire", "attack" : 200, "defense" : 95, "height" : 0.9 }
+{ "_id" : ObjectId("59370e2dce83fec3044b486a"), "name" : "onix", "description" : "boneco de pedra no formato de uma cobra", "type" : "rock", "attack" : 5, "defense" : 400, "height" : 0.7 }
+{ "_id" : ObjectId("59370e48ce83fec3044b486b"), "name" : "squirtle", "description" : "tartaruga marinha tiltada cascuda", "type" : "water", "attack" : 200, "defense" : 250, "height" : 0.8 }
+```
+===========================================================================================================================================\
+===========================================================================================================================================
+OPERADORES LOGICOS
+//se pelo menos 1 premissa for verdadeira ele ira retornar o objeto que contem essa premissa.
+or --------- $or  Retorna o objeto caso a clausula OR for verdadeira.
+               
+ex:
+```
+ var query = {$or: [{name: 'Pikachu'}, {height: 0.2}]}
+> query
+{ "$or" : [ { "name" : "Pikachu" }, { "height" : 0.2 } ] }
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370ccfce83fec3044b4868"), "name" : "Pikachu", "description" : "Boneco Amarelo que Solta Raio", "type" : "eletric", "attack" : 140, "defense" : -90, "height" : 0.6 }
+{ "_id" : ObjectId("59370eedce83fec3044b486c"), "name" : "meowth", "description" : "miau e isso ai/equipe rocket", "type" : "normal", "attack" : -5, "defense" : -4, "height" : 0.2 }
+```
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+NOT OR
+not or --------- $nor
+
+Vira todos os outros resultador que nao apareceu na lista do or ou seja, ira pesquisar os campos inversos do or.
+ex:
+```
+var query = {$nor: [{name: 'Pikachu'}, {height: 0.2}]}
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370d2dce83fec3044b4869"), "name" : "charmander", "description" : "mini dinossauro voador que tem o rabo pegando fogo", "type" : "fire", "attack" : 200, "defense" : 95, "height" : 0.9 }
+{ "_id" : ObjectId("59370e2dce83fec3044b486a"), "name" : "onix", "description" : "boneco de pedra no formato de uma cobra", "type" : "rock", "attack" : 5, "defense" : 400, "height" : 0.7 }
+{ "_id" : ObjectId("59370e48ce83fec3044b486b"), "name" : "squirtle", "description" : "tartaruga marinha tiltada cascuda", "type" : "water", "attack" : 200, "defense" : 250, "height" : 0.8 }
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+AND
+and ---------- $and
+
+TODAS AS PREMISSAS DEVEM SER VERDADEIRAS PARA PODER RETORNAR UM VALOR
+
+So retornara os campos que possuirem os 2 atributos ex o pokemon que tem o nome de pikachu e altura de 0.6 entao so retornara um valor que seja igual a este se n for igual, nao retornara nenhum valor.
+
+ex:
+```
+> var query = {$and: [{name: 'Pikachu'}, {height: 0.2}]}
+> db.pokemons.find(query)
+================ nao retornou nada, por que nao ha nenhum pokemon com o nome pikachu and altura  0.2;===============
+
+> var query = {$and: [{name: 'Pikachu'}, {height: 0.6}]}
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370ccfce83fec3044b4868"), "name" : "Pikachu", "description" : "Boneco Amarelo que Solta Raio", "type" : "eletric", "attack" : 140, "defense" : -90, "height" : 0.6 }
+
+===========================================================================================================================================\
+===========================================================================================================================================
+OPERADORES DE ARRAY, BUSCAS EM ARRAY
+
+OPERADORES EXISTENCIAIS ($exists)
+
+Serve para buscar objetos que possuem aquele campo definido. Ou seja, retorna o objeto caso o campo exista.
+
+
+
+
+
