@@ -1,0 +1,63 @@
+COMANDOS AULA 3
+var = objeto
+
+R do (cRud)= (RETRIEVE)
+
+COMANDO PARA BUSCAR INFORMACOES NO MongoDB
+
+# Retrieve #
+(_id) = (UUID) Universally unique identifier
+
+o _id e formado pelos seguintes dados:
+------------------------------------------------------------------------------------------------------------------------------------------
+4-bytes : Valor que representa os segundos desde a epoca UNIX;
+3-bytes : Identificador de maquina;
+2-bytes : ID do processo;
+3-bytes : Contador, comecando de um valor aleatorio;
+------------------------------------------------------------------------------------------------------------------------------------------
+CLAUSULAS
+EX:
+MONGODB   ------------ MYSQL
+CLAUSULAS ------------ WHERE
+FIELDS  --------------   CAMPOS
+
+db.nome_da_minhacollection.find({clausulas}, {campos})
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+var query = {type:'eletric'} = var query = {JSON=where}
+JSON(fields=campos) sera o (select)
+
+Buscar uma informacao
+ex:
+```
+var query = {type:'eletric'}
+db.pokemons.find(query)
+```
+vai pesquisar e mostrar todos as informacoes que tenham o campo type='eletric';
+--------------------------------------------------------------------------------------------------------------------------------------------
+PARA MOSTRAR OS CAMPOS:
+usa-se:
+var fields
+
+mostrar os campos desejados na pesquisa com TRUE = 1;
+usa se os comandos
+ex:
+```
+ var query = {type:'water'}
+ var fields = {name: 1, type: 1, defense: 1 }
+ db.pokemons.find(query, fields)
+>{ "_id" : ObjectId("59370e48ce83fec3044b486b"), "name" : "squirtle", "type" : "water", "defense" : 250 }<
+```
+
+// o campo _ID sempre ira retornar junto, a nao ser que voce altero o seu  valor para 0 no campo fields;
+----------------------------------------------------------------------------------------------------------------------------------------
+
+ou mostrar os campos indesejados na pesquisa com False = 0,
+ex:
+Para eliminar o campo id que sempre vem junto na busca:
+
+```
+var fields = {_id : 0, name: 1, type: 1, defense: 1 }
+db.pokemons.find(query, fields)
+>{ "name" : "squirtle", "type" : "water", "defense" : 250 }<
+```
