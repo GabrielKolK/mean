@@ -99,5 +99,8 @@ Serve para buscar objetos que possuem aquele campo definido. Ou seja, retorna o 
 
 
 
+Para colocar case sensitive {name: /Pikachu/i}
+
+
 
 
