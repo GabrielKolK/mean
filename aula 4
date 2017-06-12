@@ -1,0 +1,37 @@
+FUNCÃO UPDATE() - Alterar documentos
+
+  Usando o `save` para alterar documentos é necessáro buscar o documento antes de poder modificá-lo.
+Com o `Update` isso não é necessário.
+
+Parâmetros utilizados
+- query
+- modifcação
+- options
+
+SINTAXE -----------------------------------------------------------------------------------------------------------------------------------
+db.collection.update(query, mod, options);
+
+var poke = {name: "testemon", attack: 8000, defense: 8000, height: 2.1, description: "Pokemon de teste" }
+> poke
+{
+        "name" : "testemon",
+        "attack" : 8000,
+        "defense" : 8000,
+        "height" : 2.1,
+        "description" : "Pokemon de teste"
+}
+> db.pokemons.save(poke)
+WriteResult({ "nInserted" : 1 })
+> var query = {name: /testemon/i}
+> db.pokemons.find(query)
+{ "_id" : ObjectId("593ecd8cab6747fd83dc0adb"), "name" : "testemon", "attack" : 8000, "defense" : 8000, "height" : 2.1, "description" : "Pokemon de teste" }
+> var query = {"_id" : ObjectId("593ecd8cab6747fd83dc0adb")}
+> var mod = { description: "Mudei aquui"}
+> db.pokemons.update(query, mod)
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> var query = {"_id" : ObjectId("593ecd8cab6747fd83dc0adb")
+...
+...
+>
+> db.pokemons.find(query)
+{ "_id" : ObjectId("593ecd8cab6747fd83dc0adb"), "description" : "Mudei aquui" }
