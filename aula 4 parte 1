@@ -1,0 +1,131 @@
+FUNCÃO UPDATE() - Alterar documentos
+
+  Usando o `save` para alterar documentos é necessáro buscar o documento antes de poder modificá-lo.
+Com o `Update` isso não é necessário.
+
+Parâmetros utilizados
+- query
+- modifcação
+- options
+
+SINTAXE -----------------------------------------------------------------------------------------------------------------------------------
+db.collection.update(query, mod, options);
+
+var poke = {name: "testemon", attack: 8000, defense: 8000, height: 2.1, description: "Pokemon de teste" }
+> poke
+{
+        "name" : "testemon",
+        "attack" : 8000,
+        "defense" : 8000,
+        "height" : 2.1,
+        "description" : "Pokemon de teste"
+}
+> db.pokemons.save(poke)
+WriteResult({ "nInserted" : 1 })
+> var query = {name: /testemon/i}
+> db.pokemons.find(query)
+{ "_id" : ObjectId("593ecd8cab6747fd83dc0adb"), "name" : "testemon", "attack" : 8000, "defense" : 8000, "height" : 2.1, "description" : "Pokemon de teste" }
+> var query = {"_id" : ObjectId("593ecd8cab6747fd83dc0adb")}
+> var mod = { description: "Mudei aquui"}
+> db.pokemons.update(query, mod)
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> var query = {"_id" : ObjectId("593ecd8cab6747fd83dc0adb")
+...
+...
+>
+> db.pokemons.find(query)
+{ "_id" : ObjectId("593ecd8cab6747fd83dc0adb"), "description" : "Mudei aquui" }
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+id = "_id" : ObjectId("594024e1cb078d75e012a090")
+----------------------------------------------------------------------------------------------------------------------------------------
+OPERADORES DE MODIFICACAO
+
+$set ira modificar um valor ou cria-lo caso nao exista.
+sintaxe =
+`
+{$set : {campo : valor} }
+`
+
+ex:
+`
+db.pokemons.update( { name: P'ikachu'}, {$set: { attack: 120 } } );
+
+----------------------------------------------------------------------------------------------------------------------------------------
+$unset
+`
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+$inc 
+O operador $inc incrementa um valor no campo com a quantidade desejada. Caso o campo nao exista, ele ira criar o campo e setar o valor.
+
+Para DECREMENTAR, basta passar um valor negativo.
+
+sintaxe = 
+`
+{$inc : {campo : valor} }
+`
+ex
+`
+{$inc : {attack : 1} } // incrementara +1 ao campo attack passando de 8000 para 8001
+`
+------------------------------------------------------------------------------------------
+`
+{$inc : {attack : -1} } // decrementara -1 ao campo attack passando de 8000 para 7999
+`
+----------------------------------------------------------------------------------------------------------------------------------------
+OPERADOR $push
+O operador $push adiciona um valor ao campo, caso o campo seja um *array* existente. Caso nao exista ira criar o campo novo, do tipo
+*array* com o valor passado no $push.
+Caso o campo exista e nao for um *array*, ira retornar um erro.
+
+  sintaxe = 
+  `
+  {$push: {campo: valor} }
+  `
+ `
+  var query = {name: /pikachu/i}
+> query
+{ "name" : /pikachu/i }
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370ccfce83fec3044b4868"), "name" : "Pikachu", "description" : "Boneco Amarelo que Solta Raio", "type" : "eletric", "attack" : 140, "defense" : -90, "height" : 0.6 }
+> var mod = {$push: {moves: 'choque do trovao'}}
+> db.pokemons.update(query, mod)
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.pokemons.find(query)
+{ "_id" : ObjectId("59370ccfce83fec3044b4868"), "name" : "Pikachu", "description" : "Boneco Amarelo que Solta Raio", "type" : "eletric", "attack" : 140, "defense" : -90, "height" : 0.6, "moves" : [ "choque do trovao" ] }
+`
+----------------------------------------------------------------------------------------------------------------------------------------
+$pushAll
+O operador $pushAll adiciona cada valor do [Array_de_valores], caso o campo seja um *Array* existente. Caso nao exista ira criar o,
+campo novo, do tipo *Array* com o valor passado no $pushAll.
+
+Caso o campo exista e nao for um *Array*, ira retornar um erro.
+
+sintaxe = 
+`
+{$pushAll: {campo: [Array_de_valores] } } 
+`
+----------------------------------------------------------------------------------------------------------------------------------------
+$pull
+O operador $pull retira o valor do campo, caso o campo seja um *Array* existente. Caso nao exista ele nao fara nada.
+
+Caso o campo exista e nao for um *Array*, ira retornar um erro.
+
+sintaxe = 
+`
+{$pull: {campo: valor} }
+`
+
+----------------------------------------------------------------------------------------------------------------------------------------
+$pullAll
+
+O operador $pullAll retira cada valor do [array_de_valores], caso o campo seja um *Array* existente. Caso nao exista ele nao fara nada.
+Caso o campo exista e nao for um *Array*, ira retornar um erro.
+
+sintaxe =
+`
+{$pullAll: {campo: [Array_de_valores] } } 
+`
