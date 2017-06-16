@@ -1,1 +1,150 @@
+PARAMETRO OPTIONS
+serve para configurarmos alguns valores diferentes do padrao para o UPDATE
 
+SINTAXE =
+`
+{ 
+  upsert: boolean,  // (padrao e falso)
+  multi: boolean,   // (padrao e falso)
+  writeConcern: document
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+O POKEMON EXISTE, ENTAO ELE IRA ATUALIZAR UM CAMPO NELE, ADICIONANDO O 'ACTIVE: TRUE'
+UPSERT
+
+"serve para caso o documento não seja encontrado pela QUERY ele insira o objeto que está sendo passado como modificação.
+Ele por padrão é FALSE.
+
+ex:
+` 
+use be-mean-pokemons
+switched to db be-mean-pokemons
+db.pokemons.find()
+{ "_id" : ObjectId("59370ccfce83fec3044b4868"), "name" : "Pikachu", "description" : "Boneco Amarelo que Solta Raio", "type" : "eletric", "attack" : 140, "defense" : -90, "height" : 0.6, "moves" : [ "choque do trovao" ] }
+{ "_id" : ObjectId("59370d2dce83fec3044b4869"), "name" : "charmander", "description" : "mini dinossauro voador que tem o rabo pegando fogo", "type" : "fire", "attack" : 200, "defense" : 95, "height" : 0.9 }
+{ "_id" : ObjectId("59370e2dce83fec3044b486a"), "name" : "onix", "description" : "boneco de pedra no formato de uma cobra", "type" : "rock", "attack" : 5, "defense" : 400, "height" : 0.7 }
+{ "_id" : ObjectId("59370e48ce83fec3044b486b"), "name" : "squirtle", "description" : "tartaruga marinha tiltada cascuda", "type" : "water", "attack" : 200, "defense" : 250, "height" : 0.8 }
+{ "_id" : ObjectId("59370eedce83fec3044b486c"), "name" : "meowth", "description" : "miau e isso ai/equipe rocket", "type" : "normal", "attack" : -5, "defense" : -4, "height" : 0.2 }
+{ "_id" : ObjectId("5939b6399ff74a604eeee5b0"), "name" : "Bulbasaur", "description" : "Sapo gordo e azul", "type" : "grass", "attack" : 137, "defense" : 94, "height" : 0.4 }
+{ "_id" : ObjectId("5939b6399ff74a604eeee5b1"), "name" : "Chicorita", "description" : "Boneco assassino", "type" : "grass", "attack" : 129, "defense" : 45, "height" : 0.7 }
+{ "_id" : ObjectId("594024e1cb078d75e012a090"), "name" : "testemon", "attack" : 8000, "defense" : 8000, "height" : 2.1, "description" : "Pokemon de teste", "moves" : [ "choque do trovao" ] }
+
+var query = { name: /squirtle/i }
+var mod = {$set: {active: true} }
+var options = {upsert: true}
+
+db.pokemons.update(query, mod, options)
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+db.pokemons.find(query) // atualizou //
+{ "_id" : ObjectId("59370e48ce83fec3044b486b"), "name" : "squirtle", "description" : "tartaruga marinha tiltada cascuda", "type" : "water", "attack" : 200, "defense" : 250, "height" : 0.8, "active" : true }
+
+COMO O POKEMON EXISTE ELE SO FARA A ALTERACAO.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+QUANDO NAO EXISTE ELE ADICIONARA.
+
+`
+var query = { name: /PokemonsInexistente/i }
+var mod = {$set: {active: true} }
+var options = {upsert: true}
+db.pokemons.update(query, mod, options)
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 1,
+        "nModified" : 0,
+        "_id" : ObjectId("59440f420f22a93f629bfdb9")
+})
+
+var query = {"_id" : ObjectId("59440f420f22a93f629bfdb9") }
+db.pokemons.find(query)
+{ "_id" : ObjectId("59440f420f22a93f629bfdb9"), "active" : true }
+
+`
+Percebemos que no WriteResult ele nao achou nenhum documentos:"nMatched": 0
+
+E inseriu 1 documento novo: "nUpserted": 1
+
+Retornando o _id do documento inserido.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+$setOnInsert
+
+Com esse operador voce pode definir valores que serao adicionados apenas se ocorrer um 'upsert', ou seja, se o objeto for inserido pois nao foi achado pela 'query'.
+
+Vamos pegar um cenario onde buscaremos um pokemon em nossa pokeagenda, porem o mesmo nao se encontra nos registros, entao inserimos ele
+com valores padroes.
+
+var query = {name: /NaoExisteMon/i}
+var mod = { $set: {active: true}, $setOnInsert: { name: "NaoExisteMon", attack: null, defense: null, height: null, description: "Sem Maiores Informacoes"} }
+var options = {upsert: true}
+db.pokemons.update(query, mod, options)
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 1,
+        "nModified" : 0,
+        "_id" : ObjectId("594418bd0f22a93f629bfdc9")
+})
+---------------------------------------------------------------
+query
+{ "name" : /NaoExisteMon/i }
+---------------------------------------------------------------
+mod
+{
+        "$set" : {
+                "active" : true
+        },
+        "$setOnInsert" : {
+                "name" : "NaoExisteMon",
+                "attack" : null,
+                "defense" : null,
+                "height" : null,
+                "description" : "Sem Maiores Informacoes"
+        }
+}
+---------------------------------------------------------------
+options
+{ "upsert" : true }
+db.pokemons.find(query)
+{ "_id" : ObjectId("594418bd0f22a93f629bfdc9"), "active" : true, "name" : "NaoExisteMon", "attack" : null, "defense" : null, "height" : null, "description" : "Sem Maiores Informacoes" }
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MULTI (editar todos os campos de uma so vez) 
+
+multi: true
+
+ex
+`
+> var query = {}
+> var mod = {$set: {active: false}}
+> var options = {multi: true}
+> db.pokemons.update(query, mod, options)
+WriteResult({ "nMatched" : 10, "nUpserted" : 0, "nModified" : 10 }) // atualizou todos os pokemons de uma so vez; consegue fazer update com multiplos documentos no MongoDB//
+
+`
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+WriteConcern
+
+'descreve a garantia de que o MongoDB fornece ao relatar o sucesso de uma operacao de escrita.'
+
+'A forca dos "write concerns" determinam o nivel de garantia. Quando insercoes, atualizacoes e exclusoes tem um "write concern" fraco, operacoes de escrita retornam rapidamente.
+
+'Em alguns casos de falha, as operacoes de gravacao emitidas com "write concerns" fracos podem nao persistir.
+
+'Com os "write concerns" mais fortes, os clientes esperam apos o envio de uma operacao de escrita para o MongoDB confirmar as operacoes de escrita.'
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FIND
+operadores de ARRAY
+
+var query = {}
+var mod = {$set: {moves:['investida']}}
+var options = {multi: true}
+db.pokemons.update(query, mod, options)
+WriteResult({ "nMatched" : 10, "nUpserted" : 0, "nModified" : 10 })
+
+AGORA TODOS OS POKEMONS POSSUEM UM CAMPO DO TIPO ARRAY.
