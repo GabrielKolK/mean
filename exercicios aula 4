@@ -1,0 +1,6 @@
+exercicios aula 4
+1 - Adicionar 2 ataques ao mesmo tempo para os seguintes pokemons: pikachu, squirtle, bulbasaur e charmander.
+
+2 - Adicionar 1 movimento em todos os pokemons: 'desvio'.
+
+3 - Adicionar o pokemons 'AindaNaoExisteMon' caso ele nao exista com todos os dados com o valor 'null' e a descricao: "Sem Maiores Informacoes".
