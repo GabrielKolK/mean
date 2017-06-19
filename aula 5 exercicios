@@ -1,0 +1,22 @@
+exercicios aula 5
+
+1 - Importar as collections restaurantes e pokemons
+```
+
+```
+2 - Distinct por 'cuisine' na restaurantes
+```
+
+```
+3 - Distinct por 'types' na pokemons
+```
+
+```
+4 - As primeiras 3 paginas com .limit() e .skip() de pokemons (5 em 5)
+```
+
+```
+5 - group ou aggregate contando a quantidade de pokemons de cada tipo
+```
+
+```
