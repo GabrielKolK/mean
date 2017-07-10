@@ -1,0 +1,56 @@
+1XX - (não é tao importante)
+Informa que a informação foi recebida e que o processo continua.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+2XX - SUCESSO
+200 - ok
+o pedido ao servidor foi atendido com sucesso. A página web existe e será enviada ao user-agent (navegador, robô de busca...).
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+3XX - Redirecionamento
+Serve para avisar direto no cabeçalho HTTP uma mudança de página. Diferente de uma Meta Refresh ou usar javascript, ele permite um
+redirecionamento "suave" e importante para SEO.
+
+301 - MOVIDO PERMANENTEMENTE
+
+302 - MOVIDO TEMPORARIAMENTE
+Serve também para mover, mas com função temporária. A vantagem é que você pode reverter isto. Funciona bem para manutenções ou
+alterações não definitivas. O robô de busca continua visitando o endereço original.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+4XX - Erro do Cliente
+Deve ser tratado com atenção pois o conteúdo não estará acessível para o visitante nem para o site de busca. Problema para indexar.
+
+401 - NÃO AUTORIZADO
+O acesso a página não está autorizado pois possivelmente a pessoa não está logada. Isto impede de uma página ser indexada por exemplo,
+nem robôs de busca tem acesso.
+
+403 - PROIBIDO
+Neste caso o robô de busca também não terá como indexar o conteúdo.
+
+404 - NÃO ENCONTRADO, FAMOSO ERROR 404 NOT FOUND
+É o código de retorno pode ser de uma página ou arquivo que não exita no servidor, como um arquivo apagado. Pode ser usado para 
+apresentar uma página com conteúdos relacionados à URL procurada.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+5XX - Erro no Servidor
+O servidor não conseguir atender o pedido por algum erro. Também não permitirá a indexação da página.
+
+500 - ERRO INTERNO DO SERVIDOR
+
+503 - SERVIÇO INDISPONÍVEL
+Pode ser um erro temporário. Uma manutenção ou uma grande quantidade de acessos pode derrubar o servidor.
+
+
+
+
+
+
+
+
+
+
+
